@@ -1,6 +1,7 @@
 package com.leocardz.link.preview.library;
 
 import android.os.AsyncTask;
+import android.os.Build;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -24,19 +25,36 @@ public class TextCrawler {
 	private final String HTTPS_PROTOCOL = "https://";
 
 	private LinkPreviewCallback callback;
+	private GetCode getCode;
 
 	public TextCrawler() {
 	}
 
 	public void makePreview(LinkPreviewCallback callback, String url) {
 		this.callback = callback;
-		new GetCode(ALL).execute(url);
+		if (getCode != null){
+			getCode.cancel(true);
+		}
+		getCode = new GetCode(ALL);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
+			getCode.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url);
+		} else {
+			getCode.execute(url);
+		}
 	}
 
 	public void makePreview(LinkPreviewCallback callback, String url,
 							int imageQuantity) {
 		this.callback = callback;
-		new GetCode(imageQuantity).execute(url);
+		if (getCode != null){
+			getCode.cancel(true);
+		}
+		getCode = new GetCode(imageQuantity);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
+			getCode.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url);
+		} else {
+			getCode.execute(url);
+		}
 	}
 
 	/** Get html code */
