@@ -1,11 +1,13 @@
 package com.leocardz.link.preview.library;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class SourceContent {
+public class SourceContent implements Serializable {
 
+	private static final long serialVersionUID = 3622893982072512964L;
 	private boolean success = false;
 	private String htmlCode = "";
 	private String raw = "";
